@@ -1,0 +1,39 @@
+import SwiftUI
+import SafariServices
+
+struct ContentView: View {
+    @StateObject var userData = UserData()
+    var body: some View {
+        TabView {
+            HomeView(userData: userData)
+                .tabItem {
+                    Image(systemName: "house")
+                    Text("Home")
+                }
+            
+            StayPointsView(userData: userData)
+                .tabItem {
+                    Image(systemName: "location.circle")
+                    Text("Stay Points")
+                }
+            
+            ThroughView(userData: userData)
+                .tabItem {
+                    Image(systemName: "squareshape.split.2x2")
+                    Text("Through")
+                }
+            
+            SettingsView(userData: userData)
+                .tabItem {
+                    Image(systemName: "gearshape")
+                    Text("Settings")
+                }
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}

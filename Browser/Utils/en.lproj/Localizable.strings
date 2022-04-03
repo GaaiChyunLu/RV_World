@@ -1,0 +1,16 @@
+"Home" = "Home";
+"Settings" = "Settings";
+"Virtual Positioning" = "Virtual Positioning";
+"System Settings" = "System Settings";
+"Cache" = "Cache";
+"Off" = "Off";
+"On" = "On";
+"Set the number of virtual positions. When you send a request with location, the browser will pop up the corresponding number of interfaces." = "Set the number of virtual positions. When you send a request with location, the browser will pop up the corresponding number of interfaces.";
+"Enter website name" = "Enter website name";
+"Import Model" = "Import Model";
+"Show Track" = "Show Track";
+"Through" = "Through";
+"Set K Value" = "Set K Value";
+"Refresh Page" = "Refresh Page";
+"Select File" = "Select File";
+"Stay Points" = "Stay Points";

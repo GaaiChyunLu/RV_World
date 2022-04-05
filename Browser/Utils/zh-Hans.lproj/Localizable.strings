@@ -1,3 +1,5 @@
+// 界面字符串：
+
 "Home" = "主页";
 "Settings" = "设置";
 "Virtual Positioning" = "虚拟定位";
@@ -14,3 +16,11 @@
 "Refresh Page" = "刷新页面";
 "Select File" = "选择文件";
 "Stay Points" = "停留点";
+
+
+// 城市名称：
+
+"Chengdu" = "成都";
+"Beijing" = "北京";
+"Shanghai" = "上海";
+"Xiamen" = "厦门";

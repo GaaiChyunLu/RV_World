@@ -1,25 +1,63 @@
 import SwiftUI
 
+struct MultipleSelectionRow: View {
+    var title: String
+    var isSelected: Bool
+    var isAvalible: Bool
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: self.action) {
+            HStack {
+                SelectState()
+                Text(self.title)
+                    .foregroundColor(LabelColor())
+                Spacer()
+            }
+        }
+        .disabled(!isAvalible)
+    }
+    
+    func LabelColor() -> Color {
+        if self.isAvalible == true {
+            return .black
+        } else {
+            return .gray
+        }
+    }
+    
+    func SelectState() -> some View {
+        if self.isSelected {
+            return Image(systemName: "checkmark.circle.fill").font(.title2)
+        } else {
+            if self.isAvalible {
+                return Image(systemName: "circle").font(.title2)
+            } else {
+                return Image(systemName: "circle").font(.title2)
+            }
+        }
+    }
+}
+
 struct ChooseAnchorView: View {
     @ObservedObject var userData: UserData
     
-    @State private var selection = Set<String>()
-    @State private var isEditMode: EditMode = .active
-    
-    let items = [
-        "Item 1",
-        "Item 2",
-        "Item 3",
-        "Item 4"
-    ]
-    
     var body: some View {
-        NavigationView {
-            List(items, id: \.self, selection: $selection) { name in
-                Text(name)
+        List {
+            ForEach(anchors, id: \.self) { anchor in
+                MultipleSelectionRow(title: anchor.name,
+                                     isSelected: userData.selectedAnchors.contains(anchor),
+                                     isAvalible: userData.selectedCityNum != userData.selectedAnchors.count || userData.selectedAnchors.contains(anchor)) {
+                    if userData.selectedAnchors.contains(anchor) {
+                        userData.selectedAnchors.removeAll(where: {
+                            $0 == anchor
+                        })
+                    }
+                    else {
+                        userData.selectedAnchors.append(anchor)
+                    }
+                }
             }
-            .environment(\.editMode, self.$isEditMode)
-            .navigationTitle("Anchor Test")
         }
     }
     

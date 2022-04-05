@@ -46,7 +46,7 @@ public class StayPoint {
     }
 }
 
-public struct Point {
+public struct Point: Hashable {
     var latitude: Double
     var longitude: Double
     var timeStamp: Double = 0

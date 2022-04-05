@@ -1,3 +1,5 @@
+// Strings of Guidance:
+
 "Home" = "Home";
 "Settings" = "Settings";
 "Virtual Positioning" = "Virtual Positioning";
@@ -14,3 +16,11 @@
 "Refresh Page" = "Refresh Page";
 "Select File" = "Select File";
 "Stay Points" = "Stay Points";
+
+
+// Name of cities:
+
+"Chengdu" = "Chengdu";
+"Beijing" = "Beijing";
+"Shanghai" = "Shanghai";
+"Xiamen" = "Xiamen";

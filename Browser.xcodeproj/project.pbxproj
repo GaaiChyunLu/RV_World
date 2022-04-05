@@ -9,13 +9,13 @@
 /* Begin PBXBuildFile section */
 		8101995A27F70BF3002CCC22 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8101995927F70BF3002CCC22 /* MapKit.framework */; };
 		8101995C27F73057002CCC22 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8101995B27F73057002CCC22 /* MapView.swift */; };
-		8101996027F82F1E002CCC22 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8101995F27F82F1E002CCC22 /* Test.swift */; };
 		810945CA27CB349600B0B564 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810945C927CB349600B0B564 /* Location.swift */; };
 		810C828827991379008FCEC7 /* ImportModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810C828727991379008FCEC7 /* ImportModelView.swift */; };
 		810C828A27991655008FCEC7 /* ShowTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810C828927991655008FCEC7 /* ShowTrackView.swift */; };
 		810C828E279919FB008FCEC7 /* SystemSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810C828D279919FB008FCEC7 /* SystemSettingView.swift */; };
 		810C829127991E7E008FCEC7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 810C829327991E7E008FCEC7 /* Localizable.strings */; };
-		8139C9FD27EF0B8F00150192 /* StayPointsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8139C9FC27EF0B8F00150192 /* StayPointsView.swift */; };
+		8121B43327FA96BB00D3EB3E /* Anchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8121B43227FA96BB00D3EB3E /* Anchor.swift */; };
+		8139C9FD27EF0B8F00150192 /* ChooseAnchorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8139C9FC27EF0B8F00150192 /* ChooseAnchorView.swift */; };
 		814440BB278F0D83007EB418 /* BrowserApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814440BA278F0D83007EB418 /* BrowserApp.swift */; };
 		814440BD278F0D83007EB418 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814440BC278F0D83007EB418 /* ContentView.swift */; };
 		814440BF278F0D85007EB418 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 814440BE278F0D85007EB418 /* Assets.xcassets */; };
@@ -38,7 +38,6 @@
 		22A9A9FA094B7D0836352235 /* Pods-Browser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Browser.release.xcconfig"; path = "Target Support Files/Pods-Browser/Pods-Browser.release.xcconfig"; sourceTree = "<group>"; };
 		8101995927F70BF3002CCC22 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		8101995B27F73057002CCC22 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
-		8101995F27F82F1E002CCC22 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		810945C827CB344800B0B564 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		810945C927CB349600B0B564 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		810C828727991379008FCEC7 /* ImportModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportModelView.swift; sourceTree = "<group>"; };
@@ -46,7 +45,8 @@
 		810C828D279919FB008FCEC7 /* SystemSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemSettingView.swift; sourceTree = "<group>"; };
 		810C829227991E7E008FCEC7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		810C829427991E7F008FCEC7 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		8139C9FC27EF0B8F00150192 /* StayPointsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayPointsView.swift; sourceTree = "<group>"; };
+		8121B43227FA96BB00D3EB3E /* Anchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchor.swift; sourceTree = "<group>"; };
+		8139C9FC27EF0B8F00150192 /* ChooseAnchorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAnchorView.swift; sourceTree = "<group>"; };
 		814440B7278F0D83007EB418 /* Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		814440BA278F0D83007EB418 /* BrowserApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserApp.swift; sourceTree = "<group>"; };
 		814440BC278F0D83007EB418 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -94,6 +94,7 @@
 		810C828B2799187E008FCEC7 /* SettingsSubviews */ = {
 			isa = PBXGroup;
 			children = (
+				8139C9FC27EF0B8F00150192 /* ChooseAnchorView.swift */,
 				810C828927991655008FCEC7 /* ShowTrackView.swift */,
 				817D8EFC27B9E5BC00F32804 /* SetKValueView.swift */,
 				810C828727991379008FCEC7 /* ImportModelView.swift */,
@@ -150,9 +151,7 @@
 				817D8EFA27B9E2C200F32804 /* ThroughView.swift */,
 				814440CB279009DB007EB418 /* SettingsView.swift */,
 				810C828B2799187E008FCEC7 /* SettingsSubviews */,
-				8139C9FC27EF0B8F00150192 /* StayPointsView.swift */,
 				8101995B27F73057002CCC22 /* MapView.swift */,
-				8101995F27F82F1E002CCC22 /* Test.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -163,6 +162,7 @@
 				814440D027915707007EB418 /* UserData.swift */,
 				81735C7027DF26BB004A9D86 /* CsvData.swift */,
 				81735C7227DF2748004A9D86 /* StayPoint.swift */,
+				8121B43227FA96BB00D3EB3E /* Anchor.swift */,
 				810945C927CB349600B0B564 /* Location.swift */,
 				81A21E2727C3697C001BA643 /* Extensions.swift */,
 				810C829327991E7E008FCEC7 /* Localizable.strings */,
@@ -306,11 +306,11 @@
 				814440CC279009DB007EB418 /* SettingsView.swift in Sources */,
 				814440BD278F0D83007EB418 /* ContentView.swift in Sources */,
 				810945CA27CB349600B0B564 /* Location.swift in Sources */,
+				8121B43327FA96BB00D3EB3E /* Anchor.swift in Sources */,
 				810C828827991379008FCEC7 /* ImportModelView.swift in Sources */,
 				81A21E2827C3697C001BA643 /* Extensions.swift in Sources */,
 				8101995C27F73057002CCC22 /* MapView.swift in Sources */,
-				8139C9FD27EF0B8F00150192 /* StayPointsView.swift in Sources */,
-				8101996027F82F1E002CCC22 /* Test.swift in Sources */,
+				8139C9FD27EF0B8F00150192 /* ChooseAnchorView.swift in Sources */,
 				81D1331C279E694E001E9A5F /* CacheView.swift in Sources */,
 				81735C7127DF26BB004A9D86 /* CsvData.swift in Sources */,
 				81735C7327DF2748004A9D86 /* StayPoint.swift in Sources */,

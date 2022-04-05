@@ -41,7 +41,7 @@ struct ThroughSubViews: View {
     var selectedCityNum: Int
     var body: some View {
         TabView() {
-            ForEach(0 ..< selectedCityNum) { i in
+            ForEach(0 ..< selectedCityNum, id: \.self) { i in
                 NaiveSafariView(url: URL(string: "https://m.ctrip.com/webapp/hotel/cityD104_28/?days=1&atime=20220221&geo=1&ulocation=30.757704017297133_103.92946288059046_&ulat=\(arc4random_uniform(15) + 26)&ulon=\(arc4random_uniform(32) + 87)&ucity=28")!)
                     .tabItem {
                         Image(systemName: "\(i + 1).square")

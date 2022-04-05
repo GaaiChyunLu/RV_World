@@ -11,7 +11,7 @@ struct ContentView: View {
                     Text("Home")
                 }
             
-            StayPointsView(userData: userData)
+            ChooseAnchorView(userData: userData)
                 .tabItem {
                     Image(systemName: "location.circle")
                     Text("Stay Points")

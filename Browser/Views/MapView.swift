@@ -13,7 +13,7 @@ struct MapView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
-        uiView.showsUserLocation = true
+        uiView.showsUserLocation = false
         
         let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         let region = MKCoordinateRegion(center: location, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
@@ -34,7 +34,7 @@ struct TestView: View {
 
     var body: some View {
         NavigationView {
-            NavigationLink(destination: MapView(latitude:self.$latitude, longitude: self.$longitude)) {
+            NavigationLink(destination: MapView(latitude: self.$latitude, longitude: self.$longitude)) {
                 Text("showMap")
                 }
                 .onAppear() {

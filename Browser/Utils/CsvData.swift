@@ -5,7 +5,11 @@ public class CsvDataList {
     var tail: CsvListNode?
     
     init(csvText: String) {
-        let dataInLineArray = csvText.components(separatedBy: "\n")
+        var dataInLineArray = csvText.components(separatedBy: "\n")
+        dataInLineArray.removeAll(where: {
+            $0 == ""
+        })
+        print(dataInLineArray)
         for dataInLine in dataInLineArray {
             Append(dataInLine: dataInLine)
         }

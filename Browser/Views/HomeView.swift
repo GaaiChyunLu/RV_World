@@ -5,7 +5,6 @@ struct HomeView: View {
     
     @State private var showImport: Bool = false
     @State private var updateLocationTimer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
-    @State private var calculateStayPointsTimer = Timer.publish(every: 3600, on: .main, in: .common).autoconnect()
     
     @State var timeInterval: Double = NSDate().timeIntervalSince1970
     
@@ -25,11 +24,11 @@ struct HomeView: View {
                 longitude = locationManager.lastLocation?.coordinate.longitude ?? 0
                 let timeStamp = NSDate().timeIntervalSince1970
                 userData.points.append(Point(latitude: latitude, longitude: longitude, timeStamp: timeStamp))
-                userData.stayPoints = GetStayPoint(points: userData.points)
+//                userData.csvStayPoints = GetStayPoint(points: userData.points)
             }
 //            Text("")
 //                .onReceive(calculateStayPointsTimer) { _ in
-//                    userData.stayPoints = GetStayPoint(points: userData.points)
+//                    userData.csvStayPoints = GetStayPoint(points: userData.points)
 //                }
             
             HStack {
@@ -100,14 +99,14 @@ struct HomeView: View {
             node = node?.next
         }
         
-        self.userData.stayPoints = GetStayPoint(points: csvPoints)
+        self.userData.csvStayPoints = GetStayPoint(points: csvPoints)
 
-        for i in 0 ..< self.userData.stayPoints.count {
-            print(self.userData.stayPoints[i].point.latitude)
-            print(self.userData.stayPoints[i].point.longitude)
-            print(timeIntervalChangeToTimeStr(time: self.userData.stayPoints[i].arriveTime))
-            print(timeIntervalChangeToTimeStr(time: self.userData.stayPoints[i].leaveTime))
-            print(self.userData.stayPoints[i].typeCode)
+        for i in 0 ..< self.userData.csvStayPoints.count {
+            print(self.userData.csvStayPoints[i].point.latitude)
+            print(self.userData.csvStayPoints[i].point.longitude)
+            print(timeIntervalChangeToTimeStr(time: self.userData.csvStayPoints[i].arriveTime))
+            print(timeIntervalChangeToTimeStr(time: self.userData.csvStayPoints[i].leaveTime))
+            print(self.userData.csvStayPoints[i].typeCode)
             print()
         }
     }

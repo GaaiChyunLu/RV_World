@@ -43,21 +43,24 @@ struct ChooseAnchorView: View {
     @ObservedObject var userData: UserData
     
     var body: some View {
-        List {
-            ForEach(anchors, id: \.self) { anchor in
-                MultipleSelectionRow(title: anchor.name,
-                                     isSelected: userData.selectedAnchors.contains(anchor),
-                                     isAvalible: userData.selectedCityNum != userData.selectedAnchors.count || userData.selectedAnchors.contains(anchor)) {
-                    if userData.selectedAnchors.contains(anchor) {
-                        userData.selectedAnchors.removeAll(where: {
-                            $0 == anchor
-                        })
-                    }
-                    else {
-                        userData.selectedAnchors.append(anchor)
+        NavigationView {
+            List {
+                ForEach(anchors, id: \.self) { anchor in
+                    MultipleSelectionRow(title: anchor.name,
+                                         isSelected: userData.selectedAnchors.contains(anchor),
+                                         isAvalible: userData.selectedCityNum != userData.selectedAnchors.count || userData.selectedAnchors.contains(anchor)) {
+                        if userData.selectedAnchors.contains(anchor) {
+                            userData.selectedAnchors.removeAll(where: {
+                                $0 == anchor
+                            })
+                        }
+                        else {
+                            userData.selectedAnchors.append(anchor)
+                        }
                     }
                 }
             }
+            .navigationTitle("Choose Anchor")
         }
     }
     

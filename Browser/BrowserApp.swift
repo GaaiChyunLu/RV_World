@@ -5,7 +5,8 @@ struct BrowserApp: App {
     var body: some Scene {
         WindowGroup {
 //            ContentView()
-            ChooseAnchorView(userData: UserData())
+//            ChooseAnchorView(userData: UserData())
+            StayPointView(userData: UserData())
         }
     }
 }

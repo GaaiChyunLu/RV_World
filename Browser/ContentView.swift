@@ -3,6 +3,7 @@ import SafariServices
 
 struct ContentView: View {
     @StateObject var userData = UserData()
+    
     var body: some View {
         TabView {
             HomeView(userData: userData)

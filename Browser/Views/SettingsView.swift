@@ -26,7 +26,7 @@ struct SettingsView: View {
                 })
                 
                 Section(content: {
-                    NavigationLink(destination: CacheView()) {
+                    NavigationLink(destination: CacheView(userData: userData)) {
                         Text("Cache")
                     }
                 })

@@ -16,6 +16,11 @@
 "Refresh Page" = "刷新页面";
 "Select File" = "选择文件";
 "Stay Points" = "停留点";
+"Calculate Stay Points" = "计算停留点";
+"Clear GPS Log" = "清除GPS日志";
+"All GPS Logs will be Deleted" = "所有GPS日志将被删除";
+"You cannot undo this operation." = "此操作无法撤回。";
+"Delete" = "删除";
 
 
 // 城市名称：

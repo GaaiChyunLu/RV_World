@@ -31,6 +31,8 @@
 		81A21E2827C3697C001BA643 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A21E2727C3697C001BA643 /* Extensions.swift */; };
 		81D13317279E6723001E9A5F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 81D13319279E6723001E9A5F /* InfoPlist.strings */; };
 		81D1331C279E694E001E9A5F /* CacheView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D1331B279E694E001E9A5F /* CacheView.swift */; };
+		81DDB8CC28018620005458EB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDB8CB28018620005458EB /* Persistence.swift */; };
+		81DDB8D22801895A005458EB /* Browser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81DDB8D02801895A005458EB /* Browser.xcdatamodeld */; };
 		81FAA6F92800125700A4CC2B /* StayPointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FAA6F82800125700A4CC2B /* StayPointView.swift */; };
 		E7EBAFE24B646B345A9D3FA4 /* Pods_Browser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C858DE7CED648B249D75FC42 /* Pods_Browser.framework */; };
 /* End PBXBuildFile section */
@@ -66,6 +68,8 @@
 		81D13318279E6723001E9A5F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		81D1331A279E6724001E9A5F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		81D1331B279E694E001E9A5F /* CacheView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheView.swift; sourceTree = "<group>"; };
+		81DDB8CB28018620005458EB /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		81DDB8D12801895A005458EB /* CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreData.xcdatamodel; sourceTree = "<group>"; };
 		81FAA6F82800125700A4CC2B /* StayPointView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayPointView.swift; sourceTree = "<group>"; };
 		C858DE7CED648B249D75FC42 /* Pods_Browser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Browser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C078E413F15DD4634EF122 /* Pods-Browser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Browser.debug.xcconfig"; path = "Target Support Files/Pods-Browser/Pods-Browser.debug.xcconfig"; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 		814440AE278F0D83007EB418 = {
 			isa = PBXGroup;
 			children = (
+				81DDB8C528018485005458EB /* CoreData */,
 				814440B9278F0D83007EB418 /* Browser */,
 				814440B8278F0D83007EB418 /* Products */,
 				8101995827F70BF3002CCC22 /* Frameworks */,
@@ -173,6 +178,15 @@
 				81D13319279E6723001E9A5F /* InfoPlist.strings */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		81DDB8C528018485005458EB /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				81DDB8D02801895A005458EB /* Browser.xcdatamodeld */,
+				81DDB8CB28018620005458EB /* Persistence.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		E2730E4FC75B67DE89BC8DC2 /* Pods */ = {
@@ -305,6 +319,7 @@
 				817D8EFB27B9E2C200F32804 /* ThroughView.swift in Sources */,
 				817D8EFD27B9E5BC00F32804 /* SetKValueView.swift in Sources */,
 				814440CA279007B2007EB418 /* HomeView.swift in Sources */,
+				81DDB8CC28018620005458EB /* Persistence.swift in Sources */,
 				810C828E279919FB008FCEC7 /* SystemSettingView.swift in Sources */,
 				814440CC279009DB007EB418 /* SettingsView.swift in Sources */,
 				81FAA6F92800125700A4CC2B /* StayPointView.swift in Sources */,
@@ -321,6 +336,7 @@
 				814440D127915707007EB418 /* UserData.swift in Sources */,
 				814440BB278F0D83007EB418 /* BrowserApp.swift in Sources */,
 				810C828A27991655008FCEC7 /* ShowTrackView.swift in Sources */,
+				81DDB8D22801895A005458EB /* Browser.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -567,6 +583,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		81DDB8D02801895A005458EB /* Browser.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				81DDB8D12801895A005458EB /* CoreData.xcdatamodel */,
+			);
+			currentVersion = 81DDB8D12801895A005458EB /* CoreData.xcdatamodel */;
+			path = Browser.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 814440AF278F0D83007EB418 /* Project object */;
 }

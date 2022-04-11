@@ -1,16 +1,22 @@
 import SwiftUI
+import CoreData
 
 struct HomeView: View {
     @ObservedObject var userData: UserData
     
+    @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(entity: GPSLog.entity(), sortDescriptors: [])
+    
+    var GPSLogs: FetchedResults<GPSLog>
+    
     @State private var showImport: Bool = false
     @State private var updateLocationTimer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
-    
-    @State var timeInterval: Double = NSDate().timeIntervalSince1970
     
     var locationManager = LocationManager()
     @State private var latitude: Double = 0
     @State private var longitude: Double = 0
+    
+    @State private var upDateCoreData: Bool = true
     
     var body: some View {
         VStack {
@@ -20,16 +26,35 @@ struct HomeView: View {
                 Text("longitude: \(longitude)")
             }
             .onReceive(updateLocationTimer) { _ in
+                if upDateCoreData {
+                    for i in 0 ..< GPSLogs.count {
+                        let latitude = GPSLogs[i].latitude
+                        let longitude = GPSLogs[i].longitude
+                        let timestamp = GPSLogs[i].timestamp
+                        userData.points.append(Point(latitude: latitude, longitude: longitude, timeStamp: timestamp))
+                    }
+                    upDateCoreData = false
+                }
+                
                 latitude = locationManager.lastLocation?.coordinate.latitude ?? 0
                 longitude = locationManager.lastLocation?.coordinate.longitude ?? 0
-                let timeStamp = NSDate().timeIntervalSince1970
-                userData.points.append(Point(latitude: latitude, longitude: longitude, timeStamp: timeStamp))
-//                userData.csvStayPoints = GetStayPoint(points: userData.points)
+                let timestamp = NSDate().timeIntervalSince1970
+                userData.points.append(Point(latitude: latitude, longitude: longitude, timeStamp: timestamp))
+                
+                let point = GPSLog(context: self.viewContext)
+                point.id = UUID()
+                point.latitude = latitude
+                point.longitude = longitude
+                point.timestamp = timestamp
+                try? self.viewContext.save()
             }
-//            Text("")
-//                .onReceive(calculateStayPointsTimer) { _ in
-//                    userData.csvStayPoints = GetStayPoint(points: userData.points)
+            
+//            Button("print") {
+//                for i in 0 ..< userData.points.count {
+//                    print(timeIntervalChangeToTimeStr(time: userData.points[i].timeStamp))
 //                }
+//                
+//            }
             
             HStack {
                 Image(systemName: "pause.circle")
@@ -61,7 +86,6 @@ struct HomeView: View {
                     .fileImporter(isPresented: $showImport, allowedContentTypes: [.text], onCompletion: { result in
                         switch result {
                         case .success(let url):
-                            print(url)
                             do {
                                 _ = url.startAccessingSecurityScopedResource()
                                 let fileData = try Data(contentsOf: url)
@@ -111,7 +135,7 @@ struct HomeView: View {
         }
     }
     
-    func timeStrChangeTotimeInterval(dateTime: String) -> Double{
+    func timeStrChangeTotimeInterval(dateTime: String) -> Double {
         let format = DateFormatter.init()
         format.dateStyle = .medium
         format.timeStyle = .short

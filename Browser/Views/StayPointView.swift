@@ -19,7 +19,7 @@ struct StayPointView: View {
                 
                 ForEach(0 ..< userData.userStayPoints.count, id: \.self) { i in
                     NavigationLink(destination: MapView(latitude: self.$mapLatitude, longitude: self.$mapLongitude)) {
-                        Text("Stay Point \(i + 1)")
+                        Text("Stay Point \(i + 1)", tableName: "LocalizableWithVariable")
                     }
                     .onAppear() {
                         self.mapLatitude = userData.userStayPoints[i].point.latitude

@@ -9,7 +9,6 @@ public class CsvDataList {
         dataInLineArray.removeAll(where: {
             $0 == ""
         })
-        print(dataInLineArray)
         for dataInLine in dataInLineArray {
             Append(dataInLine: dataInLine)
         }

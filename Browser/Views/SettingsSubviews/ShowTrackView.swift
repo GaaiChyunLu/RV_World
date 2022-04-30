@@ -11,7 +11,7 @@ struct ShowTrackView: View {
     var body: some View {
         List {
             ForEach(GPSLogs, id: \.id) { log in
-                Text("\(log.latitude), \(log.longitude)")
+                Text("\(log.latitude), \(log.longitude)\n\(timeIntervalChangeToTimeStr(time: log.timestamp))")
             }
             .onDelete(perform: deleteItems)
         }

@@ -21,7 +21,7 @@ public class StayPoint {
         self.typeCode = CoordinateToTypeCode(latitude: self.point.latitude, longitude: self.point.longitude)
     }
     
-    func PeripheralSearchAPI(latitude: Double, longitude: Double) {
+    private func PeripheralSearchAPI(latitude: Double, longitude: Double) {
         let url: URL = URL(string: "https://restapi.amap.com/v3/place/around?key=\(UserData().webAPIKey)&location=\(latitude),\(longitude)&keywords=&types=&radius=&offset=1&page=1&extensions=base")!
         var urlRequest = URLRequest(url: url)
         urlRequest.addValue("text/plain", forHTTPHeaderField: "Accept")
@@ -36,7 +36,7 @@ public class StayPoint {
         .resume()
     }
     
-    func CoordinateToTypeCode(latitude: Double, longitude: Double) -> String {
+    private func CoordinateToTypeCode(latitude: Double, longitude: Double) -> String {
         PeripheralSearchAPI(latitude: latitude, longitude: longitude)
         _ = self.semaphore.wait(timeout: DispatchTime.distantFuture)
         let jsonData = JSONString.data(using: .utf8)!

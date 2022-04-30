@@ -9,8 +9,6 @@ struct BrowserApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-//            ChooseAnchorView(userData: UserData())
-//            StayPointView(userData: UserData())
         }
     }
 }

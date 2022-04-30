@@ -49,13 +49,6 @@ struct HomeView: View {
                 try? self.viewContext.save()
             }
             
-//            Button("print") {
-//                for i in 0 ..< userData.points.count {
-//                    print(timeIntervalChangeToTimeStr(time: userData.points[i].timeStamp))
-//                }
-//                
-//            }
-            
             HStack {
                 Image(systemName: "pause.circle")
                     .foregroundColor(.blue)
@@ -92,6 +85,7 @@ struct HomeView: View {
                                 if let text = String(data: fileData, encoding: .utf8) {
                                     userData.csvDataList = CsvDataList(csvText: text)
                                     InsertCsvToStayPoints()
+                                    GetMappingPoints()
                                 }
                                 url.stopAccessingSecurityScopedResource()
                             }
@@ -135,29 +129,24 @@ struct HomeView: View {
         }
     }
     
-    func timeStrChangeTotimeInterval(dateTime: String) -> Double {
-        let format = DateFormatter.init()
-        format.dateStyle = .medium
-        format.timeStyle = .short
-        format.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let date = format.date(from: dateTime)
-        return date!.timeIntervalSince1970
+    func GetMappingPoints() {
+        for stayPoint in self.userData.csvStayPoints {
+            var mappingPoints: [MappingPoint] = []
+            for i in 0 ..< 6 {
+                let mappingPoint = MappingPoint(typeCode: stayPoint.typeCode)
+                mappingPoint.GetPoint(anchor: anchors[0], anchorIndex: i)
+                mappingPoints.append(mappingPoint)
+            }
+            self.userData.allMappingPoints.append(mappingPoints)
+        }
     }
     
-    func timeIntervalChangeToTimeStr(time: Double) -> String {
-        let date = Date(timeIntervalSince1970: time)
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeStyle = .short
-        dateFormatter.dateStyle = .medium
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        dateFormatter.timeZone = .current
-        let localDate = dateFormatter.string(from: date)
-        return localDate
-    }
+
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView(userData: UserData())
+            .previewInterfaceOrientation(.portrait)
     }
 }

@@ -3,7 +3,7 @@ import SwiftyJSON
 
 class MappingPoint {
     var point = Point(latitude: 0, longitude: 0)
-    var typeCode: String
+    var typeCode: String?
     
     private var JSONString: String = ""
     private let semaphore = DispatchSemaphore(value: 0)
@@ -11,6 +11,8 @@ class MappingPoint {
     init(typeCode: String) {
         self.typeCode = typeCode
     }
+    
+    init() {}
     
     func GetPoint(anchor: Anchor, anchorIndex: Int) {
         PeripheralSearchAPI(anchor: anchor)
@@ -22,7 +24,7 @@ class MappingPoint {
     }
     
     private func PeripheralSearchAPI(anchor: Anchor) {
-        let url: URL = URL(string: "https://restapi.amap.com/v3/place/around?key=\(UserData().webAPIKey)&location=\(anchor.coordinate.latitude),\(anchor.coordinate.longitude)&keywords=&types=\(self.typeCode)&radius=&offset=6&page=1&extensions=base")!
+        let url: URL = URL(string: "https://restapi.amap.com/v3/place/around?key=\(UserData().webAPIKey)&location=\(anchor.coordinate.latitude),\(anchor.coordinate.longitude)&keywords=&types=\(self.typeCode!)&radius=&offset=25&page=1&extensions=base".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
         var urlRequest = URLRequest(url: url)
         urlRequest.addValue("text/plain", forHTTPHeaderField: "Accept")
         URLSession.shared.dataTask(with: urlRequest) { data, response, error in
@@ -37,14 +39,19 @@ class MappingPoint {
     }
 }
 
-func GetBestMappingPoints(stayPoints: [StayPoint], allMappingPoints: [[MappingPoint]]) -> [MappingPoint] {
-    let bestMappingPoints = [MappingPoint]()
-    var stayPointsDistance: Double = 0
-    for index in 0 ..< stayPoints.count - 1 {
-        stayPointsDistance += GetDistance(p1: stayPoints[index].point, p2: stayPoints[index].point)
+func GetMappingPoint(mappingPOI: UserDataPOI, poiAnchor: UserDataPOI, virtualAnchor: Anchor) -> MappingPoint {
+    let realDistance = GetDistance(p1: mappingPOI.point, p2: poiAnchor.point)
+    var shortestDistanceDifference = Double(truncating: kCFNumberPositiveInfinity)
+    var resMappingPoint = MappingPoint()
+    for i in 0 ..< 15 {
+        let mappingPoint = MappingPoint(typeCode: mappingPOI.typeCode)
+        mappingPoint.GetPoint(anchor: virtualAnchor, anchorIndex: i)
+        let mappingDistance = GetDistance(p1: virtualAnchor.coordinate, p2: mappingPoint.point)
+        let distanceDifference = abs(mappingDistance - realDistance)
+        if distanceDifference < shortestDistanceDifference {
+            shortestDistanceDifference = distanceDifference
+            resMappingPoint = mappingPoint
+        }
     }
-    for mappingPoints in allMappingPoints {
-        
-    }
-    return bestMappingPoints
+    return resMappingPoint
 }

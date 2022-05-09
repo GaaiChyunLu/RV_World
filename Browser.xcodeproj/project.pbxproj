@@ -36,7 +36,7 @@
 		81D1331C279E694E001E9A5F /* CacheView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D1331B279E694E001E9A5F /* CacheView.swift */; };
 		81DDB8CC28018620005458EB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DDB8CB28018620005458EB /* Persistence.swift */; };
 		81DDB8D22801895A005458EB /* Browser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 81DDB8D02801895A005458EB /* Browser.xcdatamodeld */; };
-		81FAA6F92800125700A4CC2B /* StayPointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FAA6F82800125700A4CC2B /* StayPointView.swift */; };
+		81FAA6F92800125700A4CC2B /* POIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FAA6F82800125700A4CC2B /* POIView.swift */; };
 		E7EBAFE24B646B345A9D3FA4 /* Pods_Browser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C858DE7CED648B249D75FC42 /* Pods_Browser.framework */; };
 /* End PBXBuildFile section */
 
@@ -76,7 +76,7 @@
 		81D1331B279E694E001E9A5F /* CacheView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheView.swift; sourceTree = "<group>"; };
 		81DDB8CB28018620005458EB /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		81DDB8D12801895A005458EB /* CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreData.xcdatamodel; sourceTree = "<group>"; };
-		81FAA6F82800125700A4CC2B /* StayPointView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayPointView.swift; sourceTree = "<group>"; };
+		81FAA6F82800125700A4CC2B /* POIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POIView.swift; sourceTree = "<group>"; };
 		C858DE7CED648B249D75FC42 /* Pods_Browser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Browser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4C078E413F15DD4634EF122 /* Pods-Browser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Browser.debug.xcconfig"; path = "Target Support Files/Pods-Browser/Pods-Browser.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -163,8 +163,8 @@
 				814440C9279007B2007EB418 /* HomeView.swift */,
 				817D8EFA27B9E2C200F32804 /* ThroughView.swift */,
 				81916D88280AB62D002563D9 /* ThroughView2.swift */,
+				81FAA6F82800125700A4CC2B /* POIView.swift */,
 				814440CB279009DB007EB418 /* SettingsView.swift */,
-				81FAA6F82800125700A4CC2B /* StayPointView.swift */,
 				810C828B2799187E008FCEC7 /* SettingsSubviews */,
 				8101995B27F73057002CCC22 /* MapView.swift */,
 			);
@@ -331,7 +331,7 @@
 				81DDB8CC28018620005458EB /* Persistence.swift in Sources */,
 				810C828E279919FB008FCEC7 /* SystemSettingView.swift in Sources */,
 				814440CC279009DB007EB418 /* SettingsView.swift in Sources */,
-				81FAA6F92800125700A4CC2B /* StayPointView.swift in Sources */,
+				81FAA6F92800125700A4CC2B /* POIView.swift in Sources */,
 				814440BD278F0D83007EB418 /* ContentView.swift in Sources */,
 				810945CA27CB349600B0B564 /* Location.swift in Sources */,
 				8121B43327FA96BB00D3EB3E /* Anchor.swift in Sources */,

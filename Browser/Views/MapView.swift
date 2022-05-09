@@ -5,8 +5,7 @@ struct MapView: UIViewRepresentable {
     
     typealias UIViewType = MKMapView
     
-    @Binding var latitude: CLLocationDegrees
-    @Binding var longitude: CLLocationDegrees
+    @Binding var pois: [UserDataPOI]
     
     func makeUIView(context: Context) -> MKMapView {
         return MKMapView()
@@ -15,47 +14,65 @@ struct MapView: UIViewRepresentable {
     func updateUIView(_ uiView: MKMapView, context: Context) {
         uiView.showsUserLocation = false
         
-        let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        var avgLatitude: Double = 0
+        var avgLongitude: Double = 0
+        for poi in pois {
+            avgLatitude += poi.point.latitude
+            avgLongitude += poi.point.longitude
+        }
+        avgLatitude /= Double(pois.count)
+        avgLongitude /= Double(pois.count)
+        
+        let location = CLLocationCoordinate2D(latitude: avgLatitude, longitude: avgLongitude)
         let region = MKCoordinateRegion(center: location, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
         
-        let pinCoordinate = CLLocationCoordinate2DMake(latitude, longitude)
-        let pin = MKPointAnnotation()
-        pin.coordinate = pinCoordinate
+        for poi in pois {
+            let pinCoordinate = CLLocationCoordinate2DMake(poi.point.latitude, poi.point.longitude)
+            let pin = MKPointAnnotation()
+            pin.coordinate = pinCoordinate
+            pin.title = poi.typeCode
+            
+            uiView.addAnnotation(pin)
+        }
         
-        uiView.addAnnotation(pin)
         uiView.setRegion(uiView.regionThatFits(region), animated: true)
     }
     
 }
 
-struct TestView: View {
+struct TrackMapView: UIViewRepresentable {
     
-    var locationManager = LocationManager()
+    typealias UIViewType = MKMapView
     
-    var latitude: CLLocationDegrees
-    var longitude: CLLocationDegrees
+    var points: [DisplayPoint]
     
-    @State private var updateLocationTimer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
-    
-    @State private var mapLatitude: CLLocationDegrees = 0
-    @State private var mapLongitude: CLLocationDegrees = 0
-
-    var body: some View {
-        NavigationView {
-            NavigationLink(destination: MapView(latitude: self.$mapLatitude, longitude: self.$mapLongitude)) {
-                Text("showMap")
-                }
-                .onAppear() {
-                    self.mapLatitude = self.latitude
-                    self.mapLongitude = self.longitude
-            }
-        }
+    func makeUIView(context: Context) -> MKMapView {
+        return MKMapView()
     }
     
-}
-
-struct MapView_Previews: PreviewProvider {
-    static var previews: some View {
-        TestView(latitude: 30.660897, longitude: 104.088089)
+    func updateUIView(_ uiView: MKMapView, context: Context) {
+        uiView.showsUserLocation = false
+        
+        var avgLatitude: Double = 0
+        var avgLongitude: Double = 0
+        for point in points {
+            avgLatitude += point.latitude!
+            avgLongitude += point.longitude!
+        }
+        avgLatitude /= Double(points.count)
+        avgLongitude /= Double(points.count)
+        
+        let location = CLLocationCoordinate2D(latitude: avgLatitude, longitude: avgLongitude)
+        let region = MKCoordinateRegion(center: location, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+        
+        for point in points {
+            let pinCoordinate = CLLocationCoordinate2DMake(point.latitude!, point.longitude!)
+            let pin = MKPointAnnotation()
+            pin.coordinate = pinCoordinate
+            
+            uiView.addAnnotation(pin)
+        }
+        
+        uiView.setRegion(uiView.regionThatFits(region), animated: true)
     }
 }

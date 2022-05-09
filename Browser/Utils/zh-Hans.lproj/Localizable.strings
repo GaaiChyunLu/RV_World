@@ -21,6 +21,9 @@
 "All GPS Logs will be Deleted" = "所有GPS日志将被删除";
 "You cannot undo this operation." = "此操作无法撤回。";
 "Delete" = "删除";
+"Mapping" = "映射";
+"Real" = "真实";
+"Virtual" = "虚拟";
 
 
 // 城市名称：

@@ -21,6 +21,9 @@
 "All GPS Logs will be Deleted" = "All GPS Logs will be Deleted";
 "You cannot undo this operation." = "You cannot undo this operation.";
 "Delete" = "Delete";
+"Mapping" = "Mapping";
+"Real" = "Real";
+"Virtual" = "Virtual";
 
 
 // Name of cities:

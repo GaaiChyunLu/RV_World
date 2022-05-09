@@ -6,7 +6,8 @@ public class UserData: ObservableObject {
     @Published var csvDataList: CsvDataList?
     @Published var points: [Point] = []
     @Published var userStayPoints: [StayPoint] = [StayPoint(point: Point(latitude: 30.752058, longitude: 103.930219), arriveTime: 123456, leaveTime: 123456)]
-    @Published var csvStayPoints: [StayPoint] = []
+    @Published var csvPois: [UserDataPOI] = []
     @Published var selectedAnchors: [Anchor] = [Anchor(name: "Chengdu", coordinate: CityCoordinate().Chengdu)]
-    @Published var allMappingPoints: [[MappingPoint]] = [[]]
+    @Published var mappingPoints = [MappingPoint]()
+    @Published var displayPoints = [[DisplayPoint]]()
 }

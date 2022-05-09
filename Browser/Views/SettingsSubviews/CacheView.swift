@@ -12,11 +12,14 @@ struct CacheView: View {
     @State private var showingAlert = false
     
     var body: some View {
-        Form {
-            Button("Clear GPS Log") {
 
+        Form {
+            Button(action: {
                 self.showingAlert = true
-            }
+            }, label: {
+                Text("Clear GPS Log")
+                    .foregroundColor(.red)
+            })
             .alert(isPresented: $showingAlert, content: {
                 .init(title: Text("All GPS Logs will be Deleted"),
                       message: Text("You cannot undo this operation."),
@@ -28,7 +31,7 @@ struct CacheView: View {
     }
     
     private func DeleteAllGPSLogs() {
-        userData.points = [Point]()
+        self.userData.points = [Point]()
         for i in 0 ..< GPSLogs.count {
             viewContext.delete(GPSLogs[i])
         }

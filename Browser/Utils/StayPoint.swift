@@ -2,6 +2,34 @@ import Foundation
 import CoreLocation
 import SwiftyJSON
 
+public class UserDataPOI {
+    var point: Point
+    var typeCode: String
+    var stayTime: Double
+    init(stayPoint: StayPoint) {
+        self.point = stayPoint.point
+        self.typeCode = stayPoint.typeCode
+        self.stayTime = stayPoint.leaveTime - stayPoint.arriveTime
+    }
+    init(poi: POI) {
+        self.point = Point(latitude: poi.latitude, longitude: poi.longitude)
+        self.typeCode = poi.type ?? "none"
+        self.stayTime = 0
+    }
+}
+
+public func GetPoiAnchorIndex(pois: [UserDataPOI]) -> Int {
+    var poiAnchorIndex: Int = 0
+    var longestStayTime: Double = 0
+    for i in 0 ..< pois.count {
+        if pois[i].stayTime > longestStayTime {
+            poiAnchorIndex = i
+            longestStayTime = pois[i].stayTime
+        }
+    }
+    return poiAnchorIndex
+}
+
 public class StayPoint {
     var point: Point
     var arriveTime: Double
@@ -22,7 +50,7 @@ public class StayPoint {
     }
     
     private func PeripheralSearchAPI(latitude: Double, longitude: Double) {
-        let url: URL = URL(string: "https://restapi.amap.com/v3/place/around?key=\(UserData().webAPIKey)&location=\(latitude),\(longitude)&keywords=&types=&radius=&offset=1&page=1&extensions=base")!
+        let url: URL = URL(string: "https://restapi.amap.com/v3/geocode/regeo?key=\(UserData().webAPIKey)&location=\(longitude),\(latitude)&poitype=&radius=&extensions=all&batch=false&roadlevel=0")!
         var urlRequest = URLRequest(url: url)
         urlRequest.addValue("text/plain", forHTTPHeaderField: "Accept")
         URLSession.shared.dataTask(with: urlRequest) { data, response, error in
@@ -41,7 +69,7 @@ public class StayPoint {
         _ = self.semaphore.wait(timeout: DispatchTime.distantFuture)
         let jsonData = JSONString.data(using: .utf8)!
         let transferData = JSON(jsonData)
-        let typeCode = transferData["pois"][0]["typecode"].stringValue
+        let typeCode = transferData["regeocode"]["pois"][0]["type"].stringValue
         return typeCode
     }
 }

@@ -6,7 +6,7 @@ struct SettingsView: View {
         NavigationView {
             Form {
                 Section(content: {
-                    NavigationLink(destination: ShowTrackView()) {
+                    NavigationLink(destination: ShowTrackView(userData: userData)) {
                         Text("Show Track")
                     }
                     

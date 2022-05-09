@@ -12,10 +12,10 @@ struct ContentView: View {
                     Text("Home")
                 }
             
-            StayPointView(userData: userData)
+            POIView(userData: userData)
                 .tabItem {
                     Image(systemName: "location.circle")
-                    Text("Stay Points")
+                    Text("Mapping")
                 }
             
             ThroughView(userData: userData)

@@ -5,9 +5,10 @@ struct HomeView: View {
     @ObservedObject var userData: UserData
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(entity: GPSLog.entity(), sortDescriptors: [])
-    
-    var GPSLogs: FetchedResults<GPSLog>
+    @FetchRequest(entity: Profile.entity(), sortDescriptors: [])
+    var profiles: FetchedResults<Profile>
+    @FetchRequest(entity: POI.entity(), sortDescriptors: [])
+    var pois: FetchedResults<POI>
     
     @State private var showImport: Bool = false
     @State private var updateLocationTimer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
@@ -16,55 +17,81 @@ struct HomeView: View {
     @State private var latitude: Double = 0
     @State private var longitude: Double = 0
     
-    @State private var upDateCoreData: Bool = true
-    
     var body: some View {
         VStack {
+            // Coordinate Updater
             VStack {
                 Text("latitude: \(latitude)")
                 
                 Text("longitude: \(longitude)")
             }
             .onReceive(updateLocationTimer) { _ in
-                if upDateCoreData {
-                    for i in 0 ..< GPSLogs.count {
-                        let latitude = GPSLogs[i].latitude
-                        let longitude = GPSLogs[i].longitude
-                        let timestamp = GPSLogs[i].timestamp
-                        userData.points.append(Point(latitude: latitude, longitude: longitude, timeStamp: timestamp))
-                    }
-                    upDateCoreData = false
+                if profiles.isEmpty {
+                    let userProfile = Profile(context: self.viewContext)
+                    userProfile.id = UUID()
+                    userProfile.city = "Chengdu"
+                    userProfile.isReal = true
                 }
-                
+                let fetchRequest = NSFetchRequest<Profile>(entityName: "Profile")
+                fetchRequest.fetchLimit = 10
+                fetchRequest.fetchOffset = 0
+                let predicate = NSPredicate(format: "isReal = 1", "")
+                fetchRequest.predicate = predicate
+                if userData.points.isEmpty {
+                    do {
+                        let userProfiles = try self.viewContext.fetch(fetchRequest)
+                        for userProfile in userProfiles {
+                            let gpsLogs = (userProfile.gpsLogs?.allObjects as? [GPSLog])!
+                            for gpsLog in gpsLogs {
+                                let latitude = gpsLog.latitude
+                                let longitude = gpsLog.longitude
+                                let timestamp = gpsLog.timestamp
+                                userData.points.append(Point(latitude: latitude, longitude: longitude, timeStamp: timestamp))
+                            }
+                        }
+                    } catch {
+                        print(error)
+                    }
+                }
                 latitude = locationManager.lastLocation?.coordinate.latitude ?? 0
                 longitude = locationManager.lastLocation?.coordinate.longitude ?? 0
                 let timestamp = NSDate().timeIntervalSince1970
                 userData.points.append(Point(latitude: latitude, longitude: longitude, timeStamp: timestamp))
-                
-                let point = GPSLog(context: self.viewContext)
-                point.id = UUID()
-                point.latitude = latitude
-                point.longitude = longitude
-                point.timestamp = timestamp
-                try? self.viewContext.save()
+                do {
+                    let userProfiles = try self.viewContext.fetch(fetchRequest)
+                    for userProfile in userProfiles {
+                        let point = GPSLog(context: self.viewContext)
+                        point.id = UUID()
+                        point.latitude = latitude
+                        point.longitude = longitude
+                        point.timestamp = timestamp
+                        point.profile = userProfile
+                    }
+                    try? self.viewContext.save()
+                } catch {
+                    print(error)
+                }
             }
             
+            // Title
             HStack {
                 Image(systemName: "pause.circle")
                     .foregroundColor(.blue)
                     .font(.homeTitle)
                 
-                Text("RV World")
+                Text("AnotherMe")
                     .font(.system(size: 50))
             }
             .padding()
             
+            // City Num Stepper
             Stepper(value: $userData.selectedCityNum, in: 1...5) {
                 Text("Number of positions: \(userData.selectedCityNum)", tableName: "LocalizableWithVariable")
                     .font(.headline)
             }
             .padding(.horizontal, 80)
             
+            // File Importer
             VStack(alignment: .leading) {
                 HStack {
                     Button(action: {
@@ -76,16 +103,74 @@ struct HomeView: View {
                             .foregroundColor(.white)
                             .cornerRadius(5)
                     })
-                    .fileImporter(isPresented: $showImport, allowedContentTypes: [.text], onCompletion: { result in
+                    .fileImporter(isPresented: $showImport, allowedContentTypes: [.commaSeparatedText], onCompletion: { result in
                         switch result {
                         case .success(let url):
                             do {
                                 _ = url.startAccessingSecurityScopedResource()
                                 let fileData = try Data(contentsOf: url)
                                 if let text = String(data: fileData, encoding: .utf8) {
+                                    DeleteAllPois()
+                                    self.userData.mappingPoints = [MappingPoint]()
+                                    DeleteVirtualProfiles()
                                     userData.csvDataList = CsvDataList(csvText: text)
-                                    InsertCsvToStayPoints()
-                                    GetMappingPoints()
+                                    InsertCsvToPois()
+                                    let fetchRequest = NSFetchRequest<Profile>(entityName: "Profile")
+                                    fetchRequest.fetchLimit = 10
+                                    fetchRequest.fetchOffset = 0
+                                    let predicate = NSPredicate(format: "isReal = 1", "")
+                                    fetchRequest.predicate = predicate
+                                    do {
+                                        let userProfiles = try self.viewContext.fetch(fetchRequest)
+                                        for userProfile in userProfiles {
+                                            for resPoi in self.userData.csvPois {
+                                                let poi = POI(context: self.viewContext)
+                                                poi.id = UUID()
+                                                poi.latitude = resPoi.point.latitude
+                                                poi.longitude = resPoi.point.longitude
+                                                poi.type = resPoi.typeCode
+                                                poi.profile = userProfile
+                                            }
+                                            try? self.viewContext.save()
+                                        }
+                                    } catch {
+                                        print(error)
+                                    }
+
+                                    let poiAnchorIndex = GetPoiAnchorIndex(pois: self.userData.csvPois)
+                                    let poiAnchor = self.userData.csvPois[poiAnchorIndex]
+                                    for poi in self.userData.csvPois {
+                                        self.userData.mappingPoints.append(GetMappingPoint(mappingPOI: poi, poiAnchor: poiAnchor, virtualAnchor: anchors[1]))
+                                    }
+                                    
+                                    let virtualProfile = Profile(context: self.viewContext)
+                                    virtualProfile.id = UUID()
+                                    virtualProfile.city = anchors[1].name
+                                    virtualProfile.isReal = false
+                                    try? self.viewContext.save()
+                                    
+                                    let fetchRequestVirtual = NSFetchRequest<Profile>(entityName: "Profile")
+                                    fetchRequestVirtual.fetchLimit = 10
+                                    fetchRequestVirtual.fetchOffset = 0
+                                    let predicateVirtual = NSPredicate(format: "isReal = 0", "")
+                                    fetchRequestVirtual.predicate = predicateVirtual
+                                    do {
+                                        let virtualProfiles = try self.viewContext.fetch(fetchRequestVirtual)
+                                        for virtualProfile in virtualProfiles {
+                                            for mappingPoint in self.userData.mappingPoints {
+                                                let poi = POI(context: self.viewContext)
+                                                poi.id = UUID()
+                                                poi.latitude = mappingPoint.point.latitude
+                                                poi.longitude = mappingPoint.point.longitude
+                                                poi.type = mappingPoint.typeCode
+                                                poi.profile = virtualProfile
+                                            }
+                                            try? self.viewContext.save()
+                                        }
+                                    } catch {
+                                        print(error)
+                                    }
+
                                 }
                                 url.stopAccessingSecurityScopedResource()
                             }
@@ -100,10 +185,53 @@ struct HomeView: View {
                     .padding()
                 }
             }
+            
+            Button("Create Virtual Profile") {
+                let virtualProfile = Profile(context: self.viewContext)
+                virtualProfile.id = UUID()
+                virtualProfile.isReal = false
+                try? self.viewContext.save()
+            }
+            Button("Delete Virtual Profile") {
+                DeleteVirtualProfiles()
+            }
+            Button("Print all Profiles") {
+                for profile in profiles {
+                    print("isReal:", profile.isReal)
+                    print("city:", profile.city ?? "none")
+                    print("Capacity of GPS Logs:", profile.gpsLogs!.count)
+                    print("Capacity of POIs:", profile.pois!.count)
+                    print()
+                }
+            }
+            Button("Print GPS Logs") {
+                let fetchRequest = NSFetchRequest<Profile>(entityName: "Profile")
+                fetchRequest.fetchLimit = 10
+                fetchRequest.fetchOffset = 0
+                let predicate = NSPredicate(format: "isReal = 1", "")
+                fetchRequest.predicate = predicate
+                do {
+                    let userProfiles = try self.viewContext.fetch(fetchRequest)
+                    for userProfile in userProfiles {
+                        let gpsLogs = (userProfile.gpsLogs?.allObjects as? [GPSLog])!.sorted(by: {return $0.timestamp < $1.timestamp})
+                        for gpsLog in gpsLogs {
+                            print("latitude:", gpsLog.latitude)
+                            print("longitude:", gpsLog.longitude)
+                            print("timestamp:", timeIntervalChangeToTimeStr(time: gpsLog.timestamp))
+                            print()
+                        }
+                    }
+                } catch {
+                    print(error)
+                }
+            }
+            Button("Delete all Pois") {
+                DeleteAllPois()
+            }
         }
     }
     
-    func InsertCsvToStayPoints() {
+    func InsertCsvToPois() {
         var csvPoints = [Point]()
         var node = self.userData.csvDataList?.head
         
@@ -117,36 +245,49 @@ struct HomeView: View {
             node = node?.next
         }
         
-        self.userData.csvStayPoints = GetStayPoint(points: csvPoints)
+        let csvStayPoints = GetStayPoint(points: csvPoints)
+        for csvStayPoint in csvStayPoints {
+            self.userData.csvPois.append(UserDataPOI(stayPoint: csvStayPoint))
+        }
 
-        for i in 0 ..< self.userData.csvStayPoints.count {
-            print(self.userData.csvStayPoints[i].point.latitude)
-            print(self.userData.csvStayPoints[i].point.longitude)
-            print(timeIntervalChangeToTimeStr(time: self.userData.csvStayPoints[i].arriveTime))
-            print(timeIntervalChangeToTimeStr(time: self.userData.csvStayPoints[i].leaveTime))
-            print(self.userData.csvStayPoints[i].typeCode)
+        for i in 0 ..< self.userData.csvPois.count {
+            print(i)
+            print(self.userData.csvPois[i].point.latitude)
+            print(self.userData.csvPois[i].point.longitude)
+            print(self.userData.csvPois[i].typeCode)
+            print(self.userData.csvPois[i].stayTime)
             print()
         }
     }
     
-    func GetMappingPoints() {
-        for stayPoint in self.userData.csvStayPoints {
-            var mappingPoints: [MappingPoint] = []
-            for i in 0 ..< 6 {
-                let mappingPoint = MappingPoint(typeCode: stayPoint.typeCode)
-                mappingPoint.GetPoint(anchor: anchors[0], anchorIndex: i)
-                mappingPoints.append(mappingPoint)
-            }
-            self.userData.allMappingPoints.append(mappingPoints)
+    func DeleteAllPois() {
+        self.userData.csvPois = [UserDataPOI]()
+        for poi in pois {
+            self.viewContext.delete(poi)
         }
+        try? self.viewContext.save()
     }
     
-
+    func DeleteVirtualProfiles() {
+        let fetchRequest = NSFetchRequest<Profile>(entityName: "Profile")
+        fetchRequest.fetchLimit = 10
+        fetchRequest.fetchOffset = 0
+        let predicate = NSPredicate(format: "isReal = 0", "")
+        fetchRequest.predicate = predicate
+        do {
+            let virtualProfiles = try self.viewContext.fetch(fetchRequest)
+            for virtualProfile in virtualProfiles {
+                self.viewContext.delete(virtualProfile)
+            }
+            try? self.viewContext.save()
+        } catch {
+            print(error)
+        }
+    }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView(userData: UserData())
-            .previewInterfaceOrientation(.portrait)
     }
 }

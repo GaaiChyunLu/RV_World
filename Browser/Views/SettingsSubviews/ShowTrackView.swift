@@ -96,7 +96,6 @@ struct ShowTrackView: View {
                         showSheet.toggle()
                     }, label: {
                         Text(String(track.displayPoints[0].timeStamp!.prefix(14)) + "00~" + "\(Int(track.displayPoints[0].timeStamp!.dropFirst(11).prefix(2))! + 1)" + ":00")
-                            .foregroundColor(.primary)
                     })
                     .sheet(isPresented: $showSheet, content: {
                         VStack(alignment: .leading) {
@@ -104,14 +103,16 @@ struct ShowTrackView: View {
                                 showSheet.toggle()
                             }
                             .padding()
-                            TrackMapView(points: track.displayPoints)
+                            TrackMapView(places: TrackToIdentifiablePlaces(track: track.displayPoints))
                         }
                     })
                 }
             }
         }
         .navigationBarTitle("Show Track", displayMode: .inline)
-        
+        .onAppear {
+            self.userData.updateAvalible = false
+        }
         
         Button(action: {
             var text: String = ""
@@ -152,7 +153,18 @@ struct ShowTrackView: View {
             }
         }
     }
+                           
+    func TrackToIdentifiablePlaces(track: [DisplayPoint]) -> [IdentifiablePlace] {
+        var places = [IdentifiablePlace]()
+        for log in track {
+            let place = IdentifiablePlace(lat: log.latitude!, long: log.longitude!)
+            places.append(place)
+        }
+        return places
+    }
 }
+
+
 
 struct ShowTrackView_Previews: PreviewProvider {
     static var previews: some View {

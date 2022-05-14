@@ -18,6 +18,14 @@ public class UserDataPOI {
     }
 }
 
+public func GetUserDataPois(pois: [POI]) -> [UserDataPOI] {
+    var userDataPois = [UserDataPOI]()
+    for poi in pois {
+        userDataPois.append(UserDataPOI(poi: poi))
+    }
+    return userDataPois
+}
+
 public func GetPoiAnchorIndex(pois: [UserDataPOI]) -> Int {
     var poiAnchorIndex: Int = 0
     var longestStayTime: Double = 0

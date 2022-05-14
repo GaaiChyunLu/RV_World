@@ -65,6 +65,9 @@ struct ThroughView: View {
                 }
             }
         }
+        .onAppear {
+            self.userData.updateAvalible = true
+        }
     }
 }
 
@@ -156,7 +159,7 @@ struct SubWebView: View {
             .animation(.default)
             
             WebView(navigationState: navigationState)
-            .onAppear() {
+            .onAppear {
                 if !self.isUpdateWebView {
                     _ = delay(0.5) {
                         navigationState.createNewWebView(withRequest: URLRequest(url: URL(string: self.inputURL) ?? URL(string: "https://apple.cn")!))
@@ -166,6 +169,7 @@ struct SubWebView: View {
             }
         
         }
+        
     }
     
     private func CheckIsCtrip(URL: String) {

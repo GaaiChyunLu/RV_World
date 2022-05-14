@@ -10,4 +10,5 @@ public class UserData: ObservableObject {
     @Published var selectedAnchors: [Anchor] = [Anchor(name: "Chengdu", coordinate: CityCoordinate().Chengdu)]
     @Published var mappingPoints = [MappingPoint]()
     @Published var displayPoints = [[DisplayPoint]]()
+    @Published var updateAvalible = true
 }

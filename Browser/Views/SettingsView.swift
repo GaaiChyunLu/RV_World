@@ -33,6 +33,9 @@ struct SettingsView: View {
             }
             .navigationTitle("Settings")
         }
+        .onAppear {
+            self.userData.updateAvalible = true
+        }
     }
 }
 

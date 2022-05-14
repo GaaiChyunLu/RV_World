@@ -2,72 +2,113 @@ import SwiftUI
 import MapKit
 import CoreData
 
+public func cityLocalizable(city: String) -> String {
+    var lng: String {
+        let userDefault = UserDefaults.standard
+        let languages:NSArray = userDefault.object(forKey: "AppleLanguages") as! NSArray
+        return languages.object(at: 0) as! String
+    }
+    var resCity = city
+    if lng == "zh-Hans-US" {
+        switch resCity {
+        case "Chengdu":
+            resCity = "成都"
+        case "Beijing":
+            resCity = "北京"
+        case "Shanghai":
+            resCity = "上海"
+        case "Xiamen":
+            resCity = "厦门"
+        default: break
+        }
+    }
+    return resCity
+}
+
+struct DisplayProfile: Hashable {
+    let id = UUID()
+    var isReal: Bool?
+    var city: String?
+    var pois: [POI]?
+    init() {}
+    init(profile: Profile) {
+        self.isReal = profile.isReal
+        self.city = profile.city
+        self.pois = (profile.pois?.allObjects as! [POI])
+    }
+}
+
 struct POIView: View {
     @ObservedObject var userData: UserData
     
-    @State private var userPois = [UserDataPOI]()
-    @State private var virtualPois = [UserDataPOI]()
-    
     @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(entity: Profile.entity(), sortDescriptors: [])
+    var profiles: FetchedResults<Profile>
+    var displayProfiles: [DisplayProfile] {
+        var displayProfiles = [DisplayProfile]()
+        for profile in profiles {
+            displayProfiles.append(DisplayProfile(profile: profile))
+        }
+        return displayProfiles
+    }
+    
+    @State var showSheet: Bool = false
     
     var body: some View {
         NavigationView {
             Form {
-                Section(content: {
-                    NavigationLink(destination: MapView(pois: $userPois), label: {
-                        Text("Chengdu")
-                    })
-                    .onAppear {
-                        self.userPois = [UserDataPOI]()
-                        let fetchRequest = NSFetchRequest<Profile>(entityName: "Profile")
-                        fetchRequest.fetchLimit = 10
-                        fetchRequest.fetchOffset = 0
-                        let predicate = NSPredicate(format: "isReal = 1", "")
-                        fetchRequest.predicate = predicate
-                        do {
-                            let userProfiles = try self.viewContext.fetch(fetchRequest)
-                            for userProfile in userProfiles {
-                                let persistantPois = (userProfile.pois?.allObjects as? [POI])!.sorted(by: {return $0.id < $1.id})
-                                for poi in persistantPois {
-                                    self.userPois.append(UserDataPOI(poi: poi))
-                                }
+                if self.profiles.count > 1 {
+                    Section(content: {
+                        ForEach(self.displayProfiles, id: \.id) { profile in
+                            if profile.isReal! {
+                                Button(action: {
+                                    showSheet.toggle()
+                                }, label: {
+                                    Text("\(cityLocalizable(city: profile.city!))")
+                                })
+                                .sheet(isPresented: $showSheet, content: {
+                                    VStack(alignment: .leading) {
+                                        Button("Back") {
+                                            self.showSheet.toggle()
+                                        }
+                                        .padding()
+                                        POIMapView(pois: GetUserDataPois(pois: profile.pois!))
+                                    }
+                                })
                             }
-                        } catch {
-                            print(error)
                         }
-                    }
-                }, header: {
-                    Text("Real")
-                })
-                
-                Section(content: {
-                    NavigationLink(destination: MapView(pois: $virtualPois), label: {
-                        Text("Beijing")
+                    }, header: {
+                        Text("Real")
                     })
-                    .onAppear() {
-                        self.virtualPois = [UserDataPOI]()
-                        let fetchRequest = NSFetchRequest<Profile>(entityName: "Profile")
-                        fetchRequest.fetchLimit = 10
-                        fetchRequest.fetchOffset = 0
-                        let predicate = NSPredicate(format: "isReal = 0 || city = 'Beijing'", "")
-                        fetchRequest.predicate = predicate
-                        do {
-                            let virtualProfiles = try self.viewContext.fetch(fetchRequest)
-                            for virtualProfile in virtualProfiles {
-                                let persistantPois = (virtualProfile.pois?.allObjects as? [POI])!.sorted(by: { return $0.id < $1.id })
-                                for poi in persistantPois {
-                                    self.virtualPois.append(UserDataPOI(poi: poi))
-                                }
+                    
+                    Section(content: {
+                        ForEach(self.displayProfiles, id: \.id) { profile in
+                            if !profile.isReal! {
+                                Button(action: {
+                                    showSheet.toggle()
+                                }, label: {
+                                    Text("\(cityLocalizable(city: profile.city!))")
+                                })
+                                .sheet(isPresented: $showSheet, content: {
+                                    VStack(alignment: .leading) {
+                                        Button("Back") {
+                                            self.showSheet.toggle()
+                                        }
+                                        .padding()
+                                        POIMapView(pois: GetUserDataPois(pois: profile.pois!))
+                                    }
+                                })
                             }
-                        } catch {
-                            print(error)
                         }
-                    }
-                }, header: {
-                    Text("Virtual")
-                })
+                    }, header: {
+                        Text("Virtual")
+                    })
+                }
             }
             .navigationTitle("Mapping")
+            .onAppear {
+                self.userData.updateAvalible = false
+            }
         }
     }
 }

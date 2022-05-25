@@ -51,14 +51,18 @@ struct ThroughView: View {
     
     var body: some View {
         TabView {
-            ForEach(0 ..< self.userData.selectedCityNum, id: \.self) { i in
+            ForEach(0 ..< self.userData.selectedAnchors.count + 1, id: \.self) { i in
                 if i == 0 {
                     SubWebView(inputURL: "https://www.baidu.com")
                         .tabItem {
                             Image(systemName: "\(i + 1).square")
                         }
                 } else {
-                    SubWebView(inputURL: "https://m.ctrip.com/webapp/hotel/cityD104_28/?days=1&atime=20220221&geo=1&ulocation=30.757704017297133_103.92946288059046_&ulat=\(WebCitiesCoordinate[i - 1].latitude)&ulon=\(WebCitiesCoordinate[i - 1].longitude)&ucity=28")
+//                    SubWebView(inputURL: "https://m.ctrip.com/webapp/hotel/cityD104_28/?days=1&atime=20220221&geo=1&ulocation=30.757704017297133_103.92946288059046_&ulat=\(WebCitiesCoordinate[i - 1].latitude)&ulon=\(WebCitiesCoordinate[i - 1].longitude)&ucity=28")
+//                        .tabItem {
+//                            Image(systemName: "\(i + 1).square")
+//                        }
+                    SubWebView(inputURL: "https://www.hotwire.com/hotels/search?destination=\(WebCitiesCoordinate[i - 1].latitude)%2C\(WebCitiesCoordinate[i - 1].longitude)&startDate=2022-05-25&endDate=2022-05-26&rooms=1&adults=2&children=0")
                         .tabItem {
                             Image(systemName: "\(i + 1).square")
                         }
@@ -137,9 +141,9 @@ struct SubWebView: View {
                     })
                 }
                 
-                Button("check") {
-                    CheckIsCtrip(URL: navigationState.currentURL?.absoluteString ?? "")
-                }
+//                Button("check") {
+//                    CheckIsCtrip(URL: navigationState.currentURL?.absoluteString ?? "")
+//                }
             }
             .onReceive(updateWebView) { _ in
                 isGoBackDisabled = !(navigationState.selectedWebView?.canGoBack ?? true)

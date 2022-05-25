@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct SetKValueView: View {
+struct MappingSettingsView: View {
     @ObservedObject var userData: UserData
     var body: some View {
         Form {
@@ -14,16 +14,19 @@ struct SetKValueView: View {
             
             Section(content: {
                 ChooseAnchorView(userData: userData)
+                ForEach(anchors, id: \.self) { anchor in
+                    
+                }
             }, header: {
-                Text("Choose Anchor")
+                Text("Choose Anchors")
             })
         }
-        .navigationBarTitle("Set K Value", displayMode: .inline)
+        .navigationBarTitle("Mapping Settings", displayMode: .inline)
     }
 }
 
 struct SetKValueView_Previews: PreviewProvider {
     static var previews: some View {
-        SetKValueView(userData: UserData())
+        MappingSettingsView(userData: UserData())
     }
 }

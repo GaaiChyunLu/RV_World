@@ -10,8 +10,8 @@ struct SettingsView: View {
                         Text("Show Track")
                     }
                     
-                    NavigationLink(destination: SetKValueView(userData: userData)) {
-                        Text("Set K Value")
+                    NavigationLink(destination: MappingSettingsView(userData: userData)) {
+                        Text("Mapping Settings")
                     }
                     
                     NavigationLink(destination: ImportModelView()) {

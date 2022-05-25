@@ -92,19 +92,8 @@ struct ShowTrackView: View {
         List {
             ForEach(gpsLogs, id: \.id) { track in
                 Section {
-                    Button(action: {
-                        showSheet.toggle()
-                    }, label: {
+                    NavigationLink(destination: TrackMapView(places: TrackToIdentifiablePlaces(track: track.displayPoints)), label: {
                         Text(String(track.displayPoints[0].timeStamp!.prefix(14)) + "00~" + "\(Int(track.displayPoints[0].timeStamp!.dropFirst(11).prefix(2))! + 1)" + ":00")
-                    })
-                    .sheet(isPresented: $showSheet, content: {
-                        VStack(alignment: .leading) {
-                            Button("Back") {
-                                showSheet.toggle()
-                            }
-                            .padding()
-                            TrackMapView(places: TrackToIdentifiablePlaces(track: track.displayPoints))
-                        }
                     })
                 }
             }
@@ -113,7 +102,7 @@ struct ShowTrackView: View {
         .onAppear {
             self.userData.updateAvalible = false
         }
-        
+        Spacer()
         Button(action: {
             var text: String = ""
             for log in GPSLogs {
@@ -124,7 +113,7 @@ struct ShowTrackView: View {
         }, label: {
             HStack {
                 Image(systemName: "square.and.arrow.up")
-                Text("Export Track")
+                Text("Export Track File")
             }
         })
         .padding()

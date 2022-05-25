@@ -21,7 +21,7 @@ struct ContentView: View {
             ThroughView(userData: userData)
                 .tabItem {
                     Image(systemName: "squareshape.split.2x2")
-                    Text("Through")
+                    Text("Browser")
                 }
             
             SettingsView(userData: userData)

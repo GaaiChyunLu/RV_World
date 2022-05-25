@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreData
 
 struct CacheView: View {
     @ObservedObject var userData: UserData
@@ -17,7 +18,7 @@ struct CacheView: View {
             Button(action: {
                 self.showingAlert = true
             }, label: {
-                Text("Clear GPS Log")
+                Text("Clear GPS Logs")
                     .foregroundColor(.red)
             })
             .alert(isPresented: $showingAlert, content: {
@@ -26,6 +27,34 @@ struct CacheView: View {
                       primaryButton: .cancel(),
                       secondaryButton: .destructive(Text("Delete"), action: DeleteAllGPSLogs))
                       })
+            
+            Button(action: {
+                self.showingAlert = true
+            }, label: {
+                Text("Clear Virtual Profiles")
+                    .foregroundColor(.red)
+            })
+            .alert(isPresented: $showingAlert, content: {
+                .init(title: Text("All Virtual Profiles will be Deleted"),
+                      message: Text("You cannot undo this operation."),
+                      primaryButton: .cancel(),
+                      secondaryButton: .destructive(Text("Delete"), action: DeleteVirtualProfiles))
+                      })
+            
+            Section {
+                Button(action: {
+                    self.showingAlert = true
+                }, label: {
+                    Text("Clear All Data")
+                        .foregroundColor(.red)
+                })
+                .alert(isPresented: $showingAlert, content: {
+                    .init(title: Text("All Data will be Deleted"),
+                          message: Text("You cannot undo this operation."),
+                          primaryButton: .cancel(),
+                          secondaryButton: .destructive(Text("Delete"), action: DeleteAllData))
+                          })
+            }
         }
         .navigationBarTitle("Cache", displayMode: .inline)
     }
@@ -40,6 +69,37 @@ struct CacheView: View {
         } catch {
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+    }
+    private func DeleteVirtualProfiles() {
+        let fetchRequest = NSFetchRequest<Profile>(entityName: "Profile")
+        fetchRequest.fetchLimit = 10
+        fetchRequest.fetchOffset = 0
+        let predicate = NSPredicate(format: "isReal = 0", "")
+        fetchRequest.predicate = predicate
+        do {
+            let virtualProfiles = try self.viewContext.fetch(fetchRequest)
+            for virtualProfile in virtualProfiles {
+                self.viewContext.delete(virtualProfile)
+            }
+            try? self.viewContext.save()
+        } catch {
+            print(error)
+        }
+    }
+    private func DeleteAllData() {
+        DeleteAllGPSLogs()
+        let fetchRequest = NSFetchRequest<Profile>(entityName: "Profile")
+        fetchRequest.fetchLimit = 10
+        fetchRequest.fetchOffset = 0
+        do {
+            let virtualProfiles = try self.viewContext.fetch(fetchRequest)
+            for virtualProfile in virtualProfiles {
+                self.viewContext.delete(virtualProfile)
+            }
+            try? self.viewContext.save()
+        } catch {
+            print(error)
         }
     }
 }

@@ -28,7 +28,7 @@
 		81735C7127DF26BB004A9D86 /* CsvData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81735C7027DF26BB004A9D86 /* CsvData.swift */; };
 		81735C7327DF2748004A9D86 /* StayPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81735C7227DF2748004A9D86 /* StayPoint.swift */; };
 		817D8EFB27B9E2C200F32804 /* ThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817D8EFA27B9E2C200F32804 /* ThroughView.swift */; };
-		817D8EFD27B9E5BC00F32804 /* SetKValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817D8EFC27B9E5BC00F32804 /* SetKValueView.swift */; };
+		817D8EFD27B9E5BC00F32804 /* MappingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817D8EFC27B9E5BC00F32804 /* MappingSettingsView.swift */; };
 		81916D89280AB62D002563D9 /* ThroughView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81916D88280AB62D002563D9 /* ThroughView2.swift */; };
 		819376A6279D1FC8009BC509 /* LocalizableWithVariable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 819376A8279D1FC8009BC509 /* LocalizableWithVariable.stringsdict */; };
 		81A21E2827C3697C001BA643 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A21E2727C3697C001BA643 /* Extensions.swift */; };
@@ -66,7 +66,7 @@
 		81735C7027DF26BB004A9D86 /* CsvData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvData.swift; sourceTree = "<group>"; };
 		81735C7227DF2748004A9D86 /* StayPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StayPoint.swift; sourceTree = "<group>"; };
 		817D8EFA27B9E2C200F32804 /* ThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThroughView.swift; sourceTree = "<group>"; };
-		817D8EFC27B9E5BC00F32804 /* SetKValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetKValueView.swift; sourceTree = "<group>"; };
+		817D8EFC27B9E5BC00F32804 /* MappingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappingSettingsView.swift; sourceTree = "<group>"; };
 		81916D88280AB62D002563D9 /* ThroughView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThroughView2.swift; sourceTree = "<group>"; };
 		819376A7279D1FC8009BC509 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/LocalizableWithVariable.stringsdict; sourceTree = "<group>"; };
 		819376A9279D1FCA009BC509 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hans"; path = "zh-Hans.lproj/LocalizableWithVariable.stringsdict"; sourceTree = "<group>"; };
@@ -108,7 +108,7 @@
 			children = (
 				8139C9FC27EF0B8F00150192 /* ChooseAnchorView.swift */,
 				810C828927991655008FCEC7 /* ShowTrackView.swift */,
-				817D8EFC27B9E5BC00F32804 /* SetKValueView.swift */,
+				817D8EFC27B9E5BC00F32804 /* MappingSettingsView.swift */,
 				810C828727991379008FCEC7 /* ImportModelView.swift */,
 				810C828D279919FB008FCEC7 /* SystemSettingView.swift */,
 				81D1331B279E694E001E9A5F /* CacheView.swift */,
@@ -326,7 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				817D8EFB27B9E2C200F32804 /* ThroughView.swift in Sources */,
-				817D8EFD27B9E5BC00F32804 /* SetKValueView.swift in Sources */,
+				817D8EFD27B9E5BC00F32804 /* MappingSettingsView.swift in Sources */,
 				814440CA279007B2007EB418 /* HomeView.swift in Sources */,
 				81DDB8CC28018620005458EB /* Persistence.swift in Sources */,
 				810C828E279919FB008FCEC7 /* SystemSettingView.swift in Sources */,

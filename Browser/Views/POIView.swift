@@ -9,7 +9,7 @@ public func cityLocalizable(city: String) -> String {
         return languages.object(at: 0) as! String
     }
     var resCity = city
-    if lng == "zh-Hans-US" {
+    if lng == "zh-Hans-CN" {
         switch resCity {
         case "Chengdu":
             resCity = "成都"
@@ -61,19 +61,8 @@ struct POIView: View {
                     Section(content: {
                         ForEach(self.displayProfiles, id: \.id) { profile in
                             if profile.isReal! {
-                                Button(action: {
-                                    showSheet.toggle()
-                                }, label: {
+                                NavigationLink(destination: POIMapView(pois: GetUserDataPois(pois: profile.pois!)), label: {
                                     Text("\(cityLocalizable(city: profile.city!))")
-                                })
-                                .sheet(isPresented: $showSheet, content: {
-                                    VStack(alignment: .leading) {
-                                        Button("Back") {
-                                            self.showSheet.toggle()
-                                        }
-                                        .padding()
-                                        POIMapView(pois: GetUserDataPois(pois: profile.pois!))
-                                    }
                                 })
                             }
                         }
@@ -84,19 +73,8 @@ struct POIView: View {
                     Section(content: {
                         ForEach(self.displayProfiles, id: \.id) { profile in
                             if !profile.isReal! {
-                                Button(action: {
-                                    showSheet.toggle()
-                                }, label: {
+                                NavigationLink(destination: POIMapView(pois: GetUserDataPois(pois: profile.pois!)), label: {
                                     Text("\(cityLocalizable(city: profile.city!))")
-                                })
-                                .sheet(isPresented: $showSheet, content: {
-                                    VStack(alignment: .leading) {
-                                        Button("Back") {
-                                            self.showSheet.toggle()
-                                        }
-                                        .padding()
-                                        POIMapView(pois: GetUserDataPois(pois: profile.pois!))
-                                    }
                                 })
                             }
                         }
@@ -105,7 +83,7 @@ struct POIView: View {
                     })
                 }
             }
-            .navigationTitle("Mapping")
+            .navigationBarTitle("Mapping", displayMode: .inline)
             .onAppear {
                 self.userData.updateAvalible = false
             }

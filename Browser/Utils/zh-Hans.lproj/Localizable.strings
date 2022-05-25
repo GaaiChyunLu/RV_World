@@ -11,19 +11,28 @@
 "Enter website name" = "输入网站名称";
 "Import Model" = "导入模型";
 "Show Track" = "显示轨迹";
-"Through" = "直达";
+"Export Track File" = "导出轨迹文件";
+"Browser" = "浏览器";
 "Set K Value" = "设置K值";
+"Mapping Settings" = "映射设置";
+"Choose Anchors" = "选择锚点";
 "Refresh Page" = "刷新页面";
 "Select File" = "选择文件";
 "Stay Points" = "停留点";
 "Calculate Stay Points" = "计算停留点";
-"Clear GPS Log" = "清除GPS日志";
+"Clear GPS Logs" = "清除GPS日志";
+"Clear Virtual Profiles" = "清除所有虚拟用户";
+"Clear All Data" = "清除所有数据";
 "All GPS Logs will be Deleted" = "所有GPS日志将被删除";
+"All Virtual Profiles will be Deleted" = "所有虚拟用户将被删除";
+"All Data will be Deleted" = "所有数据将被删除";
 "You cannot undo this operation." = "此操作无法撤回。";
 "Delete" = "删除";
 "Mapping" = "映射";
 "Real" = "真实";
 "Virtual" = "虚拟";
+"File selected" = "已选择文件";
+"No file selected" = "未选择文件";
 
 
 // 城市名称：

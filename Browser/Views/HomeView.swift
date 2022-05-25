@@ -14,71 +14,9 @@ struct HomeView: View {
     @State private var updateLocationTimer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
     
     var locationManager = LocationManager()
-    @State private var latitude: Double = 0
-    @State private var longitude: Double = 0
     
     var body: some View {
         VStack {
-            // Coordinate Updater
-            VStack {
-                Text("latitude: \(latitude)")
-                
-                Text("longitude: \(longitude)")
-            }
-            
-            .onReceive(updateLocationTimer) { _ in
-                if self.userData.updateAvalible {
-                    
-                    // User Profile Initialization
-                    if profiles.isEmpty {
-                        let userProfile = Profile(context: self.viewContext)
-                        userProfile.id = UUID()
-                        userProfile.city = "Chengdu"
-                        userProfile.isReal = true
-                    }
-                    
-                    let fetchRequest = NSFetchRequest<Profile>(entityName: "Profile")
-                    fetchRequest.fetchLimit = 10
-                    fetchRequest.fetchOffset = 0
-                    let predicate = NSPredicate(format: "isReal = 1", "")
-                    fetchRequest.predicate = predicate
-                    if userData.points.isEmpty {
-                        do {
-                            let userProfiles = try self.viewContext.fetch(fetchRequest)
-                            for userProfile in userProfiles {
-                                let gpsLogs = (userProfile.gpsLogs?.allObjects as? [GPSLog])!
-                                for gpsLog in gpsLogs {
-                                    let latitude = gpsLog.latitude
-                                    let longitude = gpsLog.longitude
-                                    let timestamp = gpsLog.timestamp
-                                    userData.points.append(Point(latitude: latitude, longitude: longitude, timeStamp: timestamp))
-                                }
-                            }
-                        } catch {
-                            print(error)
-                        }
-                    }
-                    latitude = locationManager.lastLocation?.coordinate.latitude ?? 0
-                    longitude = locationManager.lastLocation?.coordinate.longitude ?? 0
-                    let timestamp = NSDate().timeIntervalSince1970
-                    userData.points.append(Point(latitude: latitude, longitude: longitude, timeStamp: timestamp))
-                    do {
-                        let userProfiles = try self.viewContext.fetch(fetchRequest)
-                        for userProfile in userProfiles {
-                            let point = GPSLog(context: self.viewContext)
-                            point.id = UUID()
-                            point.latitude = latitude
-                            point.longitude = longitude
-                            point.timestamp = timestamp
-                            point.profile = userProfile
-                        }
-                        try? self.viewContext.save()
-                    } catch {
-                        print(error)
-                    }
-                }
-            }
-            
             // Title
             HStack {
                 Image(systemName: "pause.circle")
@@ -86,7 +24,7 @@ struct HomeView: View {
                     .font(.homeTitle)
                 
                 Text("AnotherMe")
-                    .font(.system(size: 50))
+                    .font(.system(size: 45))
             }
             .padding()
             
@@ -192,61 +130,119 @@ struct HomeView: View {
                         $showImport.wrappedValue = false
                     })
                     .padding()
+                    
+                    if profiles.count > 1 {
+                        Text("File selected")
+                    } else {
+                        Text("No file selected")
+                    }
                 }
             }
             
-            Button("Create Virtual Profile") {
-                let virtualProfile = Profile(context: self.viewContext)
-                virtualProfile.id = UUID()
-                virtualProfile.isReal = false
-                try? self.viewContext.save()
-            }
-            Button("Delete Virtual Profile") {
-                DeleteVirtualProfiles()
-            }
-            Button("Print all Profiles") {
-                for profile in profiles {
-                    print("isReal:", profile.isReal)
-                    print("city:", profile.city ?? "none")
-                    print("Capacity of GPS Logs:", profile.gpsLogs!.count)
-                    print("Capacity of POIs:", profile.pois!.count)
-                    print()
+//            Button("Create Virtual Profile") {
+//                let virtualProfile = Profile(context: self.viewContext)
+//                virtualProfile.id = UUID()
+//                virtualProfile.isReal = false
+//                try? self.viewContext.save()
+//            }
+//            Button("Delete Virtual Profile") {
+//                DeleteVirtualProfiles()
+//            }
+//            Button("Print all Profiles") {
+//                for profile in profiles {
+//                    print("isReal:", profile.isReal)
+//                    print("city:", profile.city ?? "none")
+//                    print("Capacity of GPS Logs:", profile.gpsLogs!.count)
+//                    print("Capacity of POIs:", profile.pois!.count)
+//                    print()
+//                }
+//            }
+//            Button("Print Pois") {
+//                for poi in pois {
+//                    print("city:", poi.profile?.city ?? "none")
+//                    print("coordinate:", poi.latitude, poi.longitude)
+//                    print()
+//                }
+//            }
+//            Button("Print GPS Logs") {
+//                let fetchRequest = NSFetchRequest<Profile>(entityName: "Profile")
+//                fetchRequest.fetchLimit = 10
+//                fetchRequest.fetchOffset = 0
+//                let predicate = NSPredicate(format: "isReal = 1", "")
+//                fetchRequest.predicate = predicate
+//                do {
+//                    let userProfiles = try self.viewContext.fetch(fetchRequest)
+//                    for userProfile in userProfiles {
+//                        let gpsLogs = (userProfile.gpsLogs?.allObjects as? [GPSLog])!.sorted(by: {return $0.timestamp < $1.timestamp})
+//                        for gpsLog in gpsLogs {
+//                            print("latitude:", gpsLog.latitude)
+//                            print("longitude:", gpsLog.longitude)
+//                            print("timestamp:", timeIntervalChangeToTimeStr(time: gpsLog.timestamp))
+//                            print()
+//                        }
+//                    }
+//                } catch {
+//                    print(error)
+//                }
+//            }
+//            Button("Delete all Pois") {
+//                DeleteAllPois()
+//            }
+        }
+        .onAppear {
+            self.userData.updateAvalible = true
+        }
+        .onReceive(updateLocationTimer) { _ in
+            if self.userData.updateAvalible {
+                
+                // User Profile Initialization
+                if profiles.isEmpty {
+                    let userProfile = Profile(context: self.viewContext)
+                    userProfile.id = UUID()
+                    userProfile.city = "Beijing"
+                    userProfile.isReal = true
                 }
-            }
-            Button("Print Pois") {
-                for poi in pois {
-                    print("city:", poi.profile?.city ?? "none")
-                    print("coordinate:", poi.latitude, poi.longitude)
-                    print()
-                }
-            }
-            Button("Print GPS Logs") {
+                
                 let fetchRequest = NSFetchRequest<Profile>(entityName: "Profile")
                 fetchRequest.fetchLimit = 10
                 fetchRequest.fetchOffset = 0
                 let predicate = NSPredicate(format: "isReal = 1", "")
                 fetchRequest.predicate = predicate
+                if userData.points.isEmpty {
+                    do {
+                        let userProfiles = try self.viewContext.fetch(fetchRequest)
+                        for userProfile in userProfiles {
+                            let gpsLogs = (userProfile.gpsLogs?.allObjects as? [GPSLog])!
+                            for gpsLog in gpsLogs {
+                                let latitude = gpsLog.latitude
+                                let longitude = gpsLog.longitude
+                                let timestamp = gpsLog.timestamp
+                                userData.points.append(Point(latitude: latitude, longitude: longitude, timeStamp: timestamp))
+                            }
+                        }
+                    } catch {
+                        print(error)
+                    }
+                }
+                let latitude = locationManager.lastLocation?.coordinate.latitude ?? 0
+                let longitude = locationManager.lastLocation?.coordinate.longitude ?? 0
+                let timestamp = NSDate().timeIntervalSince1970
+                userData.points.append(Point(latitude: latitude, longitude: longitude, timeStamp: timestamp))
                 do {
                     let userProfiles = try self.viewContext.fetch(fetchRequest)
                     for userProfile in userProfiles {
-                        let gpsLogs = (userProfile.gpsLogs?.allObjects as? [GPSLog])!.sorted(by: {return $0.timestamp < $1.timestamp})
-                        for gpsLog in gpsLogs {
-                            print("latitude:", gpsLog.latitude)
-                            print("longitude:", gpsLog.longitude)
-                            print("timestamp:", timeIntervalChangeToTimeStr(time: gpsLog.timestamp))
-                            print()
-                        }
+                        let point = GPSLog(context: self.viewContext)
+                        point.id = UUID()
+                        point.latitude = latitude
+                        point.longitude = longitude
+                        point.timestamp = timestamp
+                        point.profile = userProfile
                     }
+                    try? self.viewContext.save()
                 } catch {
                     print(error)
                 }
             }
-            Button("Delete all Pois") {
-                DeleteAllPois()
-            }
-        }
-        .onAppear {
-            self.userData.updateAvalible = true
         }
     }
     

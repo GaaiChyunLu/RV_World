@@ -10,12 +10,12 @@ struct MultipleSelectionRow: View {
         Button(action: self.action) {
             HStack {
                 SelectState()
-                Text(self.title)
+                Text(LocalizedStringKey(self.title))
                     .foregroundColor(LabelColor())
                 Spacer()
             }
         }
-        .disabled(!isAvalible)
+        .disabled(true)
     }
     
     func LabelColor() -> Color {

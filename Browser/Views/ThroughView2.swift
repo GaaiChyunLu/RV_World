@@ -1,5 +1,6 @@
 import SwiftUI
 import WebKit
+import CoreData
 
 let WebCitiesCoordinate = [CityCoordinate().Chengdu, CityCoordinate().Xiamen, CityCoordinate().Shanghai, CityCoordinate().Beijing]
 
@@ -47,11 +48,15 @@ struct WebView: UIViewRepresentable {
 }
 
 struct ThroughView: View {
+    
     @ObservedObject var userData: UserData
+    
+    @FetchRequest(entity: Profile.entity(), sortDescriptors: [])
+    var profiles: FetchedResults<Profile>
     
     var body: some View {
         TabView {
-            ForEach(0 ..< self.userData.selectedAnchors.count + 1, id: \.self) { i in
+            ForEach(0 ..< self.profiles.count, id: \.self) { i in
                 if i == 0 {
                     SubWebView(inputURL: "https://www.baidu.com")
                         .tabItem {
@@ -62,7 +67,7 @@ struct ThroughView: View {
 //                        .tabItem {
 //                            Image(systemName: "\(i + 1).square")
 //                        }
-                    SubWebView(inputURL: "https://www.hotwire.com/hotels/search?destination=\(WebCitiesCoordinate[i - 1].latitude)%2C\(WebCitiesCoordinate[i - 1].longitude)&startDate=2022-05-25&endDate=2022-05-26&rooms=1&adults=2&children=0")
+                    SubWebView(inputURL: "https://www.hotwire.com/hotels/search?destination=\(anchors[i - 1].coordinate.latitude)%2C\(anchors[i - 1].coordinate.longitude)&startDate=2022-05-25&endDate=2022-05-26&rooms=1&adults=2&children=0")
                         .tabItem {
                             Image(systemName: "\(i + 1).square")
                         }

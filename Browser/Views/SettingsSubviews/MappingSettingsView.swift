@@ -5,7 +5,7 @@ struct MappingSettingsView: View {
     var body: some View {
         Form {
             Section(content: {
-                Stepper(value: $userData.selectedCityNum, in: self.userData.selectedAnchors.count...5) {
+                Stepper(value: $userData.selectedCityNum, in: 1 ... anchors.count) {
                     Text("Number of positions: \(userData.selectedCityNum)", tableName: "LocalizableWithVariable")
                 }
             }, footer: {
@@ -13,15 +13,25 @@ struct MappingSettingsView: View {
             })
             
             Section(content: {
-                ChooseAnchorView(userData: userData)
-                ForEach(anchors, id: \.self) { anchor in
-                    
+                ForEach(0 ..< anchors.count, id: \.self) { index in
+                    HStack {
+                        SelectState(cityIndex: index, selectedCityNum: self.userData.selectedCityNum)
+                        Text(anchors[index].name)
+                    }
                 }
             }, header: {
                 Text("Choose Anchors")
             })
         }
         .navigationBarTitle("Mapping Settings", displayMode: .inline)
+    }
+    
+    func SelectState(cityIndex: Int, selectedCityNum: Int) -> some View {
+        if cityIndex < selectedCityNum {
+            return Image(systemName: "checkmark.circle.fill").font(.title2)
+        } else {
+            return Image(systemName: "circle").font(.title2)
+        }
     }
 }
 

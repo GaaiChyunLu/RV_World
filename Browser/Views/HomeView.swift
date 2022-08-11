@@ -97,28 +97,6 @@ struct HomeView: View {
                                         virtualProfile.city = anchor.name
                                         virtualProfile.isReal = false
                                         try? self.viewContext.save()
-                                        
-                                        let fetchRequestVirtual = NSFetchRequest<Profile>(entityName: "Profile")
-                                        fetchRequestVirtual.fetchLimit = 10
-                                        fetchRequestVirtual.fetchOffset = 0
-                                        let predicateVirtual = NSPredicate(format: "isReal = 0 && city = '\(anchor.name)'", "")
-                                        fetchRequestVirtual.predicate = predicateVirtual
-                                        do {
-                                            let virtualProfiles = try self.viewContext.fetch(fetchRequestVirtual)
-                                            for virtualProfile in virtualProfiles {
-                                                for mappingPoint in self.userData.mappingPoints {
-                                                    let poi = POI(context: self.viewContext)
-                                                    poi.id = UUID()
-                                                    poi.latitude = mappingPoint.point.latitude
-                                                    poi.longitude = mappingPoint.point.longitude
-                                                    poi.type = mappingPoint.typeCode
-                                                    poi.profile = virtualProfile
-                                                }
-                                                try? self.viewContext.save()
-                                            }
-                                        } catch {
-                                            print(error)
-                                        }
                                     }
                                     
                                     self.fileSeleted = true
@@ -201,6 +179,27 @@ struct HomeView: View {
                     } catch {
                         print(error)
                     }
+                    do {
+                        let virtualProfiles = try self.viewContext.fetch(fetchRequestVirtual)
+                        for virtualProfile in virtualProfiles {
+                            let mappingRoute = MappingRoute()
+                            for i in self.userData.mappingPoints.indices {
+                                if i != self.userData.mappingPoints.count - 1 {
+                                    mappingRoute.GetRoute(origin: self.userData.mappingPoints[i], destination: self.userData.mappingPoints[i + 1])
+                                }
+                            }
+                            for point in mappingRoute.points {
+                                let gpsLog = GPSLog(context: self.viewContext)
+                                gpsLog.id = UUID()
+                                gpsLog.latitude = point.latitude
+                                gpsLog.longitude = point.longitude
+                                gpsLog.profile = virtualProfile
+                            }
+                            try? self.viewContext.save()
+                        }
+                    } catch {
+                        print(error)
+                    }
                 }
             }, label: {
                 Text("Initialize")
@@ -209,6 +208,13 @@ struct HomeView: View {
                     .foregroundColor(.white)
                     .cornerRadius(5)
             })
+            
+//            Button("print") {
+//                for poi in self.userData.csvPois {
+//                    print(poi.point)
+//                    print(poi.stayTime)
+//                }
+//            }
             
 //            Button("Create Virtual Profile") {
 //                let virtualProfile = Profile(context: self.viewContext)
@@ -219,15 +225,15 @@ struct HomeView: View {
 //            Button("Delete Virtual Profile") {
 //                DeleteVirtualProfiles()
 //            }
-//            Button("Print all Profiles") {
-//                for profile in profiles {
-//                    print("isReal:", profile.isReal)
-//                    print("city:", profile.city ?? "none")
-//                    print("Capacity of GPS Logs:", profile.gpsLogs!.count)
-//                    print("Capacity of POIs:", profile.pois!.count)
-//                    print()
-//                }
-//            }
+            Button("Print all Profiles") {
+                for profile in profiles {
+                    print("isReal:", profile.isReal)
+                    print("city:", profile.city ?? "none")
+                    print("Capacity of GPS Logs:", profile.gpsLogs!.count)
+                    print("Capacity of POIs:", profile.pois!.count)
+                    print()
+                }
+            }
 //            Button("Print Pois") {
 //                for poi in pois {
 //                    print("city:", poi.profile?.city ?? "none")

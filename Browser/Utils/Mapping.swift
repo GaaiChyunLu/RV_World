@@ -55,3 +55,41 @@ func GetMappingPoint(mappingPOI: UserDataPOI, poiAnchor: UserDataPOI, virtualAnc
     }
     return resMappingPoint
 }
+
+class MappingRoute {
+    var points = [Point]()
+    
+    private var JSONString: String = ""
+    private let semaphore = DispatchSemaphore(value: 0)
+    
+    func GetRoute(origin: MappingPoint, destination: MappingPoint) {
+        MappingRouteAPI(origin: origin, destination: destination)
+        _ = self.semaphore.wait(timeout: DispatchTime.distantFuture)
+        let jsonData = JSONString.data(using: .utf8)!
+        let transferData = JSON(jsonData)
+        var i = 0
+        while let polys = transferData["route"]["paths"][0]["steps"][i]["polyline"].string?.components(separatedBy: ";") {
+            i += 1
+            for poly in polys {
+                let coordinate = poly.components(separatedBy: ",")
+                let point = Point(latitude: Double(coordinate[1])!, longitude: Double(coordinate[0])!)
+                self.points.append(point)
+            }
+        }
+    }
+    
+    private func MappingRouteAPI(origin: MappingPoint, destination: MappingPoint) {
+        let url: URL = URL(string: "https://restapi.amap.com/v3/direction/driving?key=\(UserData().webAPIKey)&origin=\(origin.point.longitude),\(origin.point.latitude)&destination=\(destination.point.longitude),\(destination.point.latitude)&originid=&destinationid=&extensions=base&strategy=0&waypoints=&avoidpolygons=&avoidroad=".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
+        var urlRequest = URLRequest(url: url)
+        urlRequest.addValue("text/plain", forHTTPHeaderField: "Accept")
+        URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+            if let data = data,
+               let httpResponse = response as? HTTPURLResponse, (200..<300) ~= httpResponse.statusCode,
+               let strData = String(bytes: data, encoding: .utf8) {
+                self.JSONString = strData
+            }
+            self.semaphore.signal()
+        }
+        .resume()
+    }
+}

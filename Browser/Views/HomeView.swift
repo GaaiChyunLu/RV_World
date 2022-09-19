@@ -225,15 +225,15 @@ struct HomeView: View {
 //            Button("Delete Virtual Profile") {
 //                DeleteVirtualProfiles()
 //            }
-            Button("Print all Profiles") {
-                for profile in profiles {
-                    print("isReal:", profile.isReal)
-                    print("city:", profile.city ?? "none")
-                    print("Capacity of GPS Logs:", profile.gpsLogs!.count)
-                    print("Capacity of POIs:", profile.pois!.count)
-                    print()
-                }
-            }
+//            Button("Print all Profiles") {
+//                for profile in profiles {
+//                    print("isReal:", profile.isReal)
+//                    print("city:", profile.city ?? "none")
+//                    print("Capacity of GPS Logs:", profile.gpsLogs!.count)
+//                    print("Capacity of POIs:", profile.pois!.count)
+//                    print()
+//                }
+//            }
 //            Button("Print Pois") {
 //                for poi in pois {
 //                    print("city:", poi.profile?.city ?? "none")
